@@ -1,0 +1,168 @@
+import json 
+#CLASE ARCHIVOS
+#
+#MODOS DE apertura:
+#el puntero de un archivo es
+
+'MODO      DESCRIPCION  '
+' r        abre archivo solo para lectura'
+' rb       abre archivo binario solo para lectura'
+' r+       abre un archivo de texto para lectura y escritura'
+' w        abre un archivo de texto solo para escritura(si no existe lo crea, si existe lo sobreescribe)'
+' wb       abre un archivo solo para escribura binaria(si no existe lo crea, si existe lo sobreescribe)'
+' w+       abre un archivo de texto para escritura y lectura (si no existe lo crea, si existe lo sobreescribe)'
+' a        abre un archivo para anexar informacion'
+
+#APERTURA:
+#FUNCION OPEN
+
+modo = 'a'
+nombre_archivo = 'nombre del archivo'
+archivo = open(nombre_archivo, modo)
+
+#CIERRE:
+'para cerrar usamos el metodo CLOSE'
+
+#archivo.close()
+
+#SECUENCIA WITH:
+'esto se encarga de cerrar el archivo mediante el sistema'
+
+with open('archivo.txt','r+') as archivo:
+    for linea in archivo:
+        print(linea, end= "")
+
+'escribir una cadena de caracteres dentro del archivo'
+
+archivo = open('archivo.txt','w')
+archivo.write('primer linea de texto \n')
+archivo.write('segunda linea \n')
+archivo.write('tercera linea \n')
+archivo.close()
+
+#WRITELINES:
+'escribe una lista de cadena de caracteres dentro del archivo.'
+'el parametro que recibe el metodo es cualquier iterable'
+
+archivo = open('archivo.txt','w')
+lineas_texto = ['Primer linea de texto \n',
+                'segunda linea \n'
+                'tercera linea \n']
+archivo.writelines(lineas_texto)
+archivo.close()
+'debo usar close siempre, porque sino el archivo queda abierto y consumiendo memoria'
+#READ:
+'permite extraer un string que contenga todos lso caracteres del archivo'
+'(es posible limitar al metodo read a que lea cierta cantidad de bytes read(cantidad))'
+
+#abro en modo lectura escritura r+
+archivo = open('archivo.txt', 'r+')
+texto = archivo.read()
+print('el contenido del archivo es: ' + texto)
+#cerrar el archivo
+archivo.close()
+
+
+#READLINES
+'permite obtener una lista con todas las lineas que contiene el archivo'
+archivo = open('archivo.txt','r+')
+lista_lineas = archivo.readlines()
+for linea in lista_lineas:
+    print(linea, end= "")
+    #cerramos el archivo
+archivo.close()
+
+#ARCHIVOS CSV 
+'los datos que pertenecen a este archivo estan delimitados por comas'
+'tiene una determinada cantidad de columnas'
+
+#LECTURA
+
+with open("archivo.csv", "r") as archivo:
+
+    matriz = []
+    nombres_columnas = archivo.readline().strip().split(",")
+
+    for linea in archivo:
+        linea = linea.rstrip("\n ")
+        fila = []
+        valores = linea.split(",")
+
+        for valor in valores:
+            if valor.isdigit():
+                fila.append(int(valor))
+            else:
+                fila.append(valor)
+        
+        matriz.append(fila)
+print(nombres_columnas)
+
+for fila in matriz:
+    print(fila)
+
+#funcion
+
+
+
+#ESCRITURA 
+
+nombres_columnas = ["nombre", "edad","ciudad"]
+matriz = [["pedro",24,"París"],["Jose",25,"toronto"]]
+
+def escritura_en_csv(nombre_archivo, nombres_columnas, matriz ):
+    with open(nombre_archivo,"w")as archivo:
+        archivo.write(",".join(nombres_columnas)+ "\n")
+
+        for fila in matriz:
+            linea = ""
+            for i in range(len(fila)):
+
+                linea += str(fila[i])
+
+                if i < (len(fila) -1):
+                    linea += ","
+            archivo.write(linea + "\n")
+
+
+
+#JSON:
+'javaScript Object Notation'
+
+{
+    "nombre": "juan",
+    "edad": 28,
+    "ciudad": "Madrid",
+    "amigos":[
+        {"nombre": "Ana", "edad":22},
+        {"nombre": "Luis", "edad":35}
+    ]
+}
+
+#ESCRITURA:
+datos = {
+    "nombre": "juan",
+    "edad": 28,
+    "ciudad": "Madrid",}
+with open('archivo.json','w') as archivo_json:
+    json.dump(datos,archivo_json,indent=4)
+    #se usa indent para que sea mas legible 
+
+
+def escribir_json(nombre_del_archivo,datos,):
+    with open(nombre_del_archivo,'w') as archivo_json:
+        json.dump(datos,archivo_json,indent=4)
+
+
+#LECTURA 
+with open('archivo.json','r') as archivo_json:
+    datos = json.load(archivo_json) #carga el contenido en un diccionario
+    print(datos)
+
+
+#funcion
+def leer_json(nombre_del_archivo):
+    with open(nombre_del_archivo,'r') as archivo_json:
+        datos = json.load(archivo_json) #carga el contenido en un diccionario
+        print(datos)
+    
+leer_json('archivo.json')
