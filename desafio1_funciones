@@ -1,0 +1,23 @@
+import json
+
+def leer_csv(nombre_de_archivo):
+    with open(nombre_de_archivo,'r') as canciones:
+        matriz = []
+        nombres_columnas = canciones.readline().strip().split(",")
+
+        for linea in canciones:
+            linea = linea.rstrip("\n ")
+            fila = []
+            valores = linea.split(",")
+
+            for valor in valores:
+                if valor.isdigit():
+                    fila.append(int(valor))
+                else:
+                    fila.append(valor)
+            
+            matriz.append(fila)
+    print(nombres_columnas)
+
+    for fila in matriz:
+        print(fila)
